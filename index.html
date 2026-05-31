@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Pour Maman 💐</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cream: #FAF6F0;
+    --warm: #F5EDE0;
+    --blush: #E8C4A8;
+    --rose: #C97B5A;
+    --deep: #7A3F24;
+    --text: #2C1A0E;
+    --muted: #8C6A52;
+    --green: #7A9E7E;
+    --gold: #C9A84C;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── PÉTALES DE FOND ─── */
+  .bg-petals {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .bg-petals span {
+    position: absolute;
+    border-radius: 50% 0 50% 0;
+    opacity: 0.08;
+    animation: drift linear infinite;
+  }
+
+  @keyframes drift {
+    0%   { transform: translateY(-60px) rotate(0deg);   opacity: 0; }
+    10%  { opacity: 0.08; }
+    90%  { opacity: 0.06; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ─── WRAPPER ─── */
+  .wrap {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+  }
+
+  .panel {
+    width: min(680px, 100%);
+  }
+
+  /* ─── SCREENS ─── */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ─── ECRAN 0 : PORTE ─── */
+  .door-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding: 40px 0 24px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .door-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 46px);
+    line-height: 1.15;
+    text-align: center;
+    color: var(--deep);
+  }
+  .door-title em {
+    font-style: italic;
+    color: var(--rose);
+  }
+
+  .door-wrap {
+    position: relative;
+    width: 200px;
+    height: 280px;
+  }
+
+  .door {
+    width: 200px;
+    height: 280px;
+    background: linear-gradient(160deg, var(--warm) 0%, var(--blush) 100%);
+    border-radius: 100px 100px 8px 8px;
+    border: 2px solid var(--blush);
+    position: relative;
+    cursor: pointer;
+    transition: filter .2s;
+    box-shadow:
+      inset 0 0 0 6px rgba(255,255,255,.35),
+      0 20px 50px rgba(122,63,36,.15);
+    transform-origin: left center;
+    transform-style: preserve-3d;
+    transition: transform .7s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .door:hover { filter: brightness(1.04); }
+  .door.open  { transform: perspective(900px) rotateY(-78deg); }
+
+  .door-knob {
+    position: absolute;
+    right: 22px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 2px 6px rgba(201,168,76,.4);
+  }
+
+  /* Fleur déco sur la porte */
+  .door-flower {
+    position: absolute;
+    left: 50%;
+    top: 38%;
+    transform: translate(-50%, -50%);
+    font-size: 52px;
+    filter: drop-shadow(0 4px 8px rgba(122,63,36,.18));
+    pointer-events: none;
+  }
+
+  .door-hint {
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ─── ECRAN 1 : LETTRE ─── */
+  .letter-wrap {
+    padding: 8px 0 4px;
+  }
+
+  .letter-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .letter-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 3.5vw, 32px);
+    color: var(--deep);
+  }
+
+  .letter-subtitle {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  .pill {
+    font-size: 11.5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: rgba(201,123,90,.1);
+    border: 1px solid rgba(201,123,90,.25);
+    color: var(--rose);
+    white-space: nowrap;
+    font-weight: 500;
+  }
+
+  /* Carte lettre */
+  .letter-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid rgba(201,123,90,.15);
+    padding: 32px 32px 28px;
+    box-shadow: 0 8px 32px rgba(122,63,36,.08);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .65s ease, transform .65s ease;
+  }
+  .letter-card.visible { opacity: 1; transform: translateY(0); }
+
+  /* Motif décoratif coin */
+  .letter-card::before {
+    content: "✿";
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    font-size: 28px;
+    opacity: .12;
+    color: var(--rose);
+  }
+  .letter-card::after {
+    content: "✿";
+    position: absolute;
+    bottom: 14px;
+    left: 20px;
+    font-size: 22px;
+    opacity: .10;
+    color: var(--green);
+    transform: rotate(180deg);
+  }
+
+  .letter-date {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .letter-body {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(15px, 2vw, 17px);
+    line-height: 1.85;
+    color: var(--text);
+  }
+
+  .letter-body p { margin-bottom: 16px; }
+  .letter-body p:last-child { margin-bottom: 0; }
+
+  .letter-body .highlight {
+    color: var(--rose);
+    font-style: italic;
+  }
+
+  .letter-sign {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(201,123,90,.15);
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--muted);
+    font-size: 15px;
+  }
+
+  /* ─── MOTS FLOTTANTS (Qualités) ─── */
+  .qualities-section {
+    margin-top: 28px;
+  }
+  .qualities-label {
+    font-size: 11px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .qualities-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .q-tag {
+    font-family: 'Playfair Display', serif;
+    font-size: 13.5px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    cursor: default;
+    transition: transform .2s, box-shadow .2s;
+    animation: tagIn .5s ease both;
+    border: 1px solid transparent;
+  }
+  .q-tag:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(122,63,36,.12);
+  }
+  .q-tag.rose   { background: rgba(201,123,90,.12); border-color: rgba(201,123,90,.25); color: var(--deep); }
+  .q-tag.green  { background: rgba(122,158,126,.12); border-color: rgba(122,158,126,.3); color: #3a5c3e; }
+  .q-tag.gold   { background: rgba(201,168,76,.12); border-color: rgba(201,168,76,.3); color: #6b4f10; }
+  .q-tag.cream  { background: rgba(122,63,36,.07); border-color: rgba(122,63,36,.15); color: var(--deep); }
+
+  @keyframes tagIn {
+    from { opacity: 0; transform: scale(.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  /* ─── ECRAN 2 : FINAL ─── */
+  .final-scene {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 32px 0 20px;
+    gap: 20px;
+  }
+
+  .final-flowers {
+    font-size: 64px;
+    letter-spacing: 6px;
+    animation: bloom 1s ease both;
+  }
+
+  @keyframes bloom {
+    from { transform: scale(.5) rotate(-10deg); opacity: 0; }
+    to   { transform: scale(1) rotate(0deg);    opacity: 1; }
+  }
+
+  .final-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(26px, 4.5vw, 40px);
+    color: var(--deep);
+    line-height: 1.2;
+  }
+  .final-title em { font-style: italic; color: var(--rose); }
+
+  .final-note {
+    font-size: 15px;
+    color: var(--muted);
+    max-width: 42ch;
+    line-height: 1.6;
+  }
+
+  /* ─── BOUTONS ─── */
+  .btn {
+    appearance: none;
+    border: none;
+    border-radius: 14px;
+    padding: 13px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform .15s, filter .15s;
+    letter-spacing: .2px;
+  }
+  .btn:hover  { transform: translateY(-1px); filter: brightness(1.04); }
+  .btn:active { transform: translateY(0);    filter: brightness(.97); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--rose), var(--deep));
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(122,63,36,.22);
+  }
+  .btn-ghost {
+    background: rgba(255,255,255,.7);
+    color: var(--muted);
+    border: 1px solid rgba(201,123,90,.2);
+  }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; transform: none !important; }
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* ─── SÉPARATEUR FLORAL ─── */
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 20px;
+  }
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,123,90,.25), transparent);
+  }
+  .divider-icon { font-size: 18px; opacity: .5; }
+
+  /* ─── CONFETTI ─── */
+  canvas#confetti {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="confetti"></canvas>
+
+<!-- Pétales de fond -->
+<div class="bg-petals" id="bgPetals"></div>
+
+<div class="wrap">
+<div class="panel">
+
+  <!-- ═══ ÉCRAN 0 : PORTE ═══ -->
+  <section id="screen0" class="screen active">
+    <div class="door-scene">
+      <span class="eyebrow">Fête des Mères 2025</span>
+
+      <h1 class="door-title">
+        Un message<br/>pour toi, <em>Maman</em>
+      </h1>
+
+      <div class="door-wrap">
+        <div class="door" id="doorBtn" role="button" tabindex="0" aria-label="Ouvrir">
+          <div class="door-flower">🌸</div>
+          <div class="door-knob"></div>
+        </div>
+      </div>
+
+      <p class="door-hint">Clique pour ouvrir 🌷</p>
+    </div>
+  </section>
+
+  <!-- ═══ ÉCRAN 1 : LETTRE ═══ -->
+  <section id="screen1" class="screen">
+    <div class="letter-wrap">
+
+      <div class="letter-header">
+        <div>
+          <h2 class="letter-title">Pour toi, Maman 🌸</h2>
+          <p class="letter-subtitle">Quelques mots du fond du cœur</p>
+        </div>
+        <span class="pill">💐 Fête des Mères</span>
+      </div>
+
+      <div class="letter-card" id="letterCard">
+        <p class="letter-date">Fête des Mères, 2025</p>
+        <div class="letter-body">
+          <p>Ma chère Maman,</p>
+          <p>Je t'écris ces quelques lignes pour te dire ce que je n'exprime peut-être pas assez souvent, mais que je ressens chaque jour <span class="highlight">profondément</span>.</p>
+          <p>Merci pour ton amour, ta patience, tes conseils et toutes les fois où tu as été là pour moi sans hésiter.</p>
+          <p>Tu es une femme <span class="highlight">forte, courageuse, belle</span> — et pas seulement en apparence. Ton intelligence m'a appris à voir le monde autrement, ta générosité est sans limites, et ton amour est la chose la plus précieuse que je connaisse.</p>
+          <p>À mes yeux, tu n'es pas parfaite parce que tu ne fais jamais d'erreurs, mais parce que tu es ma mère. Et moi, je t'aime exactement comme ça.</p>
+          <p>Peu importe où la vie me mènera, une partie de moi reviendra toujours vers toi, parce que tu es <span class="highlight">mon premier foyer, mon premier amour</span> et mon plus grand soutien.</p>
+          <p>J'espère qu'un jour je pourrai te rendre ne serait-ce qu'une partie de tout ce que tu m'as donné.</p>
+          <p>Je t'aime infiniment, Maman. 💛</p>
+        </div>
+        <div class="letter-sign">
+          Avec tout mon amour,<br/>
+          Ta fille 💐
+        </div>
+      </div>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-icon">✿</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <div class="qualities-section">
+        <p class="qualities-label">Ce que tu es</p>
+        <div class="qualities-cloud" id="qualitiesCloud"></div>
+      </div>
+
+      <div class="footer-row">
+        <button class="btn btn-ghost" id="backTo0">← Retour</button>
+        <button class="btn btn-primary" id="toFinal">Continuer →</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══ ÉCRAN 2 : FINAL ═══ -->
+  <section id="screen2" class="screen">
+    <div class="final-scene">
+
+      <div class="final-flowers" id="finalFlowers">🌸💐🌷</div>
+
+      <h2 class="final-title">
+        Bonne Fête des Mères,<br/>
+        <em>Maman</em> 🥰
+      </h2>
+
+      <p class="final-note">
+        Je t'aime infiniment. Chaque jour, je suis reconnaissante que tu sois ma maman. 💛
+      </p>
+
+      <div style="margin-top: 8px;">
+        <button class="btn btn-ghost" id="restart">↻ Recommencer</button>
+      </div>
+
+    </div>
+  </section>
+
+</div>
+</div>
+
+<script>
+// ─── PÉTALES ───
+(function(){
+  const container = document.getElementById('bgPetals');
+  const colors = ['#C97B5A','#E8C4A8','#7A9E7E','#C9A84C','#7A3F24'];
+  for(let i = 0; i < 18; i++){
+    const s = document.createElement('span');
+    const size = 14 + Math.random() * 22;
+    s.style.cssText = [
+      `width:${size}px`,`height:${size * 1.4}px`,
+      `left:${Math.random()*100}%`,
+      `top:${-60 + Math.random()*20}px`,
+      `background:${colors[Math.floor(Math.random()*colors.length)]}`,
+      `animation-duration:${8+Math.random()*12}s`,
+      `animation-delay:${Math.random()*10}s`
+    ].join(';');
+    container.appendChild(s);
+  }
+})();
+
+// ─── QUALITÉS ───
+const QUALITIES = [
+  { label: '✦ Forte',          cls: 'rose'  },
+  { label: '✦ Courageuse',     cls: 'green' },
+  { label: '✦ Belle',          cls: 'gold'  },
+  { label: '✦ Intelligente',   cls: 'rose'  },
+  { label: '✦ Généreuse',      cls: 'cream' },
+  { label: '✦ Aimante',        cls: 'green' },
+  { label: '✦ Parfaite',       cls: 'gold'  },
+];
+
+function renderQualities(){
+  const cloud = document.getElementById('qualitiesCloud');
+  cloud.innerHTML = '';
+  QUALITIES.forEach((q, i) => {
+    const tag = document.createElement('span');
+    tag.className = 'q-tag ' + q.cls;
+    tag.textContent = q.label;
+    tag.style.animationDelay = (i * 80) + 'ms';
+    cloud.appendChild(tag);
+  });
+}
+
+// ─── NAVIGATION ───
+const s0 = document.getElementById('screen0');
+const s1 = document.getElementById('screen1');
+const s2 = document.getElementById('screen2');
+
+function show(el){
+  [s0, s1, s2].forEach(x => x.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Porte → Lettre
+const doorBtn = document.getElementById('doorBtn');
+function openDoor(){
+  doorBtn.classList.add('open');
+  setTimeout(() => {
+    show(s1);
+    renderQualities();
+    setTimeout(() => {
+      document.getElementById('letterCard').classList.add('visible');
+    }, 80);
+    softTick();
+  }, 480);
+}
+doorBtn.addEventListener('click', openDoor);
+doorBtn.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') openDoor(); });
+
+document.getElementById('backTo0').addEventListener('click', () => {
+  doorBtn.classList.remove('open');
+  show(s0);
+});
+
+// Lettre → Final
+document.getElementById('toFinal').addEventListener('click', async () => {
+  try { await getAudio().resume(); } catch(e){}
+  playHarpSequence();
+  launchConfetti(2800);
+  show(s2);
+  setTimeout(stopConfetti, 3000);
+});
+
+// Restart
+document.getElementById('restart').addEventListener('click', () => {
+  doorBtn.classList.remove('open');
+  document.getElementById('letterCard').classList.remove('visible');
+  show(s0);
+});
+
+// ─── AUDIO ───
+let audioCtx = null;
+function getAudio(){
+  if(!audioCtx) audioCtx = new(window.AudioContext||window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playHarpSequence(){
+  const ctx = getAudio();
+  const now = ctx.currentTime;
+  // Notes douces, harp-like
+  const notes = [261.6, 329.6, 392, 523.3, 659.3, 784, 1046.5, 880, 659.3, 523.3];
+  notes.forEach((freq, i) => {
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(freq, now + i * 0.1);
+    g.gain.setValueAtTime(0.0001, now + i * 0.1);
+    g.gain.exponentialRampToValueAtTime(0.18, now + i * 0.1 + 0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.1 + 0.6);
+    o.connect(g).connect(ctx.destination);
+    o.start(now + i * 0.1);
+    o.stop(now + i * 0.1 + 0.65);
+  });
+}
+
+function softTick(){
+  const ctx = getAudio();
+  const now = ctx.currentTime;
+  const o = ctx.createOscillator(); const g = ctx.createGain();
+  o.type='sine'; o.frequency.setValueAtTime(440, now);
+  o.frequency.exponentialRampToValueAtTime(220, now+0.1);
+  g.gain.setValueAtTime(0.0001,now); g.gain.exponentialRampToValueAtTime(0.1,now+0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001,now+0.1);
+  o.connect(g).connect(ctx.destination); o.start(now); o.stop(now+0.12);
+}
+
+// ─── CONFETTI ───
+const canvas = document.getElementById('confetti');
+const ctx2 = canvas.getContext('2d');
+let particles = [], rafId = null, confOn = false;
+
+function resizeCanvas(){
+  canvas.width  = window.innerWidth  * devicePixelRatio;
+  canvas.height = window.innerHeight * devicePixelRatio;
+  canvas.style.width  = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  ctx2.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+window.addEventListener('resize', resizeCanvas);
+
+function launchConfetti(dur=2800){
+  resizeCanvas();
+  canvas.style.display = 'block';
+  confOn = true; particles = [];
+  const count = Math.min(420, Math.floor(window.innerWidth * .55));
+  for(let i=0;i<count;i++) particles.push(makeP());
+  const start = performance.now();
+  function frame(t){
+    const el = t - start;
+    drawP(el);
+    if(el < dur && confOn) rafId = requestAnimationFrame(frame);
+    else stopConfetti();
+  }
+  rafId = requestAnimationFrame(frame);
+}
+
+function stopConfetti(){
+  confOn = false;
+  if(rafId) cancelAnimationFrame(rafId);
+  canvas.style.display = 'none';
+  particles = [];
+}
+
+function makeP(){
+  const x = window.innerWidth * (.15 + Math.random()*.7);
+  return {
+    x, y: -20 - Math.random()*200,
+    size: 5 + Math.random()*8,
+    vx: -2.5 + Math.random()*5,
+    vy: 1.5 + Math.random()*4.5,
+    g:  .07 + Math.random()*.1,
+    rot: Math.random()*Math.PI,
+    vr: -.15 + Math.random()*.3,
+    c: pick(['rgba(201,123,90,.9)','rgba(122,158,126,.9)','rgba(201,168,76,.9)',
+             'rgba(255,255,255,.85)','rgba(232,196,168,.9)','rgba(122,63,36,.75)'])
+  };
+}
+
+function drawP(elapsed){
+  ctx2.clearRect(0,0,window.innerWidth,window.innerHeight);
+  for(const p of particles){
+    p.vy += p.g * (1 + elapsed/1000);
+    p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+    if(elapsed < 350) p.vy -= .1;
+    ctx2.save();
+    ctx2.translate(p.x,p.y); ctx2.rotate(p.rot);
+    ctx2.fillStyle = p.c;
+    // formes variées
+    const r = Math.floor(p.size) % 3;
+    if(r===0){
+      ctx2.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6);
+    } else if(r===1){
+      ctx2.beginPath();
+      ctx2.arc(0,0,p.size/2,0,Math.PI*2);
+      ctx2.fill();
+    } else {
+      ctx2.beginPath();
+      ctx2.moveTo(0,-p.size/2);
+      ctx2.lineTo(p.size*.45,p.size*.45);
+      ctx2.lineTo(-p.size*.45,p.size*.45);
+      ctx2.closePath(); ctx2.fill();
+    }
+    ctx2.restore();
+  }
+  particles = particles.filter(p => p.y < window.innerHeight + 80);
+  if(elapsed < 1200 && particles.length < 250) particles.push(makeP());
+}
+
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+</script>
+</body>
+</html>
